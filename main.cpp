@@ -1,10 +1,7 @@
+#include <QApplication>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtWebEngine/QtWebEngine>
-#include <QQuickStyle>
-#include <QQmlContext>
 #include <QIcon>
-#include "notifier.h"
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -32,22 +29,16 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 
 int main(int argc, char *argv[])
 {
+    qInstallMessageHandler(myMessageOutput);
 
-    QCoreApplication::setOrganizationName("Appadeia");
-    QCoreApplication::setOrganizationDomain("me.appadeia");
-    QCoreApplication::setApplicationName("QDiscord");
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
-
-    QQuickStyle::setStyle(QStringLiteral("Material"));
-    QtWebEngine::initialize();
-
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication app(argc, argv);
     app.setWindowIcon(QIcon::fromTheme("internet-web-browser"));
-
-    qmlRegisterType<Notifier>("me.appadeia.Notifier", 1, 0, "Notifier");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
     return app.exec();
 }
