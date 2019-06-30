@@ -1,10 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Window 2.12
-import QtWebEngine 1.2
+import QtWebEngine 1.9
 import QtQuick.Controls 2.0
+import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0 as Native
 
-Window {
+ApplicationWindow {
     id: root
     visible: true
     width: 800
@@ -19,6 +20,11 @@ Window {
         } else {
             systray.visible = false
         }
+    }
+
+    Settings {
+        id: settings
+        property url defaultURL: "https://www.discordapp.com/login"
     }
 
     Component.onCompleted: {
@@ -80,6 +86,7 @@ Window {
                     root.shouldClose = false
                     systray.visible = true
                     webView.url = "https://discordapp.com/login"
+                    settings.defaultURL = "https://discordapp.com/login"
                     webView.shouldShow = true
                 }
             }
@@ -102,6 +109,7 @@ Window {
                     root.shouldClose = false
                     systray.visible = true
                     webView.url = "https://ptb.discordapp.com/login"
+                    settings.defaultURL = "https://ptb.discordapp.com/login"
                     webView.shouldShow = true
                 }
             }
@@ -124,6 +132,7 @@ Window {
                     root.shouldClose = false
                     systray.visible = true
                     webView.url = "https://canary.discordapp.com/login"
+                    settings.defaultURL = "https://canary.discordapp.com/login"
                     webView.shouldShow = true
                 }
             }
@@ -136,12 +145,21 @@ Window {
         Behavior on y {
             NumberAnimation {
                 duration: 300
-                easing: Easing.InOutQuad
+                easing.type: Easing.InOutQuad
             }
         }
+        onFeaturePermissionRequested: {
+            grantFeaturePermission(securityOrigin, feature, true)
+        }
 
+        profile: WebEngineProfile {
+            onPresentNotification: {
+                console.log(notification.title)
+                console.log(notification.message)
+            }
+        }
         width: parent.width
         height: parent.height
-        url: "https://www.discordapp.com/login"
+        url: settings.defaultURL
     }
 }
