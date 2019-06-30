@@ -1,0 +1,4 @@
+/home/cdblack/git/qdiscord/cbuild/CMakeFiles/rebuild_cache.dir
+/home/cdblack/git/qdiscord/cbuild/CMakeFiles/Desucordo.dir
+/home/cdblack/git/qdiscord/cbuild/CMakeFiles/edit_cache.dir
+/home/cdblack/git/qdiscord/cbuild/CMakeFiles/Desucordo_autogen.dir
