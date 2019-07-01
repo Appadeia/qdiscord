@@ -3,7 +3,9 @@ import QtQuick.Window 2.12
 import QtWebEngine 1.2
 import QtQuick.Controls 2.0
 import Qt.labs.platform 1.0 as Native
+import Qt.labs.settings 1.0
 import me.appadeia.Simplifier 1.0
+import QtQuick.Controls.Material 2.12
 
 Window {
     id: root
@@ -13,7 +15,10 @@ Window {
     title: webView.shouldShow ? webView.title : qsTr("Discord Wrapper")
     color: "#2C2F33"
     property bool shouldClose: true
-    SystemPalette { id: sysPalette; colorGroup: SystemPalette.Active }
+
+    Material.accent: "#7289DA"
+    Material.theme: Material.Dark
+
     Simplifier { id: simp }
     onClosing: {
         if (!root.shouldClose) {
@@ -23,8 +28,12 @@ Window {
             systray.visible = false
         }
     }
-
+    Settings {
+        id: settings
+        property int versionIndex: 0
+    }
     Component.onCompleted: {
+        console.log(settings.versionIndex)
         root.showMaximized()
         var http = new XMLHttpRequest();
         var url = "https://capnkitten.github.io/BetterDiscord/Material-Discord/css/source.css";
@@ -67,6 +76,7 @@ Window {
 
 
     Column {
+        focus: true
         anchors.horizontalCenter: parent.horizontalCenter
         Rectangle {
             height: 10
@@ -84,69 +94,95 @@ Window {
             width: 1
             color: "transparent"
         }
-        VersionRow {
-            height: 64
-            width: header.width
-            text: "Discord Stable"
-            hovering: stableMaus.containsMouse
-            MouseArea {
-                id: stableMaus
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                    root.shouldClose = false
-                    systray.visible = true
-                    webView.url = "https://discordapp.com/login"
-                    webView.shouldShow = true
-                }
-            }
-        }
         Rectangle {
-            height: 5
-            width: 1
+            radius: 5
+            height: childrenRect.height + 2
+            width: childrenRect.width + 2
             color: "transparent"
-        }
-        VersionRow {
-            height: 64
-            width: header.width
-            text: "Discord PTB (Beta)"
-            hovering: ptbMaus.containsMouse
-            MouseArea {
-                id: ptbMaus
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                    root.shouldClose = false
-                    systray.visible = true
-                    webView.url = "https://ptb.discordapp.com/login"
-                    webView.shouldShow = true
+            border.color: "#141616"
+            border.width: 1
+            Column {
+                opacity: 1
+                id: versionColumn
+                x: 1
+                y: 1
+                VersionRow {
+                    height: 64
+                    width: header.width
+                    text: "Discord Stable"
+                    hovering: stableMaus.containsMouse
+                    lastSelected: settings.versionIndex == 0
+                    MouseArea {
+                        id: stableMaus
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            root.shouldClose = false
+                            systray.visible = true
+                            if (settings.versionIndex != 0) {
+                                settings.versionIndex = 0
+                                webView.url = "https://discordapp.com/login"
+                            }
+                            webView.shouldShow = true
+                        }
+                    }
+                }
+                Rectangle {
+                    height: 1
+                    width: header.width
+                    color: "#141616"
+                }
+                VersionRow {
+                    height: 64
+                    width: header.width
+                    text: "Discord PTB (Beta)"
+                    hovering: ptbMaus.containsMouse
+                    lastSelected: settings.versionIndex == 1
+                    MouseArea {
+                        id: ptbMaus
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            root.shouldClose = false
+                            systray.visible = true
+                            if (settings.versionIndex != 1) {
+                                settings.versionIndex = 1
+                                webView.url = "https://ptb.discordapp.com/login"
+                            }
+                            webView.shouldShow = true
+                        }
+                    }
+                }
+                Rectangle {
+                    height: 1
+                    width: header.width
+                    color: "#141616"
+                }
+                VersionRow {
+                    height: 64
+                    width: header.width
+                    text: "Discord Canary (Testing)"
+                    hovering: canaryMaus.containsMouse
+                    lastSelected: settings.versionIndex == 2
+                    MouseArea {
+                        id: canaryMaus
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            root.shouldClose = false
+                            systray.visible = true
+                            if (settings.versionIndex != 2) {
+                                settings.versionIndex = 2
+                                webView.url = "https://canary.discordapp.com/login"
+                            }
+                            webView.shouldShow = true
+                        }
+                    }
                 }
             }
         }
         Rectangle {
-            height: 5
-            width: 1
-            color: "transparent"
-        }
-        VersionRow {
-            height: 64
-            width: header.width
-            text: "Discord Canary (Testing)"
-            hovering: canaryMaus.containsMouse
-            MouseArea {
-                id: canaryMaus
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                    root.shouldClose = false
-                    systray.visible = true
-                    webView.url = "https://canary.discordapp.com/login"
-                    webView.shouldShow = true
-                }
-            }
-        }
-        Rectangle {
-            height: 5
+            height: 10
             width: 1
             color: "transparent"
         }
@@ -155,6 +191,7 @@ Window {
             width: header.width
             color: "#23272A"
             border.color: "#141616"
+            radius: 5
 
             Label {
                 anchors.verticalCenter: parent.verticalCenter
@@ -163,12 +200,12 @@ Window {
                 color: "white"
                 text: "Use Material Style"
             }
-            Switch {
+            CheckBox {
                 id: styleSwitch
-                property bool enabled: position > 0.5 ? true : false
+                property alias enabled: styleSwitch.checked
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                anchors.rightMargin: 20
+                anchors.rightMargin: 12
             }
         }
     }
@@ -187,7 +224,7 @@ Window {
 
         width: parent.width
         height: parent.height
-        url: "https://www.discordapp.com/login"
+        url: "https://blank.org"
         function injectCss(css) {
             if (!styleSwitch.enabled) {
                 return;
@@ -198,6 +235,17 @@ Window {
         onLoadingChanged: {
             if (loadRequest.status == WebEngineLoadRequest.LoadSucceededStatus) {
                 injectCss(webView.css)
+            }
+        }
+        Component.onCompleted: {
+            if (settings.versionIndex == 0) {
+                webView.url = "https://www.discordapp.com/login"
+            } else if (settings.versionIndex == 1) {
+                webView.url = "https://ptb.discordapp.com/login"
+            } else if (settings.versionIndex == 2) {
+                webView.url = "https://canary.discordapp.com/login"
+            } else {
+                webView.url = "https://www.discordapp.com/login"
             }
         }
     }
