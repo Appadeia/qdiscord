@@ -1,0 +1,23 @@
+{
+    "app-id" : "me.appadeia.QDiscord",
+    "runtime" : "org.kde.Platform",
+    "runtime-version" : "5.12",
+    "sdk" : "org.kde.Sdk",
+    "command" : "desucordo",
+    "finish-args" : [
+            "--share=ipc", "--talk-name=org.kde.StatusNotifierWatcher", "--device=dri", "--socket=x11", "--socket=wayland", "--share=network", "--filesystem=host"
+    ],
+    "modules" : [
+        {
+            "name" : "desucordo",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://github.com/Appadeia/qdiscord/archive/0.1.tar.gz",
+                    "sha256" : "5b6c39507a7806ba6a72edd7fdce114a5d6c7b8e5992e7a6136eb9333a15ecd4"
+                }
+            ]
+        }
+    ]
+}
