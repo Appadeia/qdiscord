@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtWebEngine 1.2
 import QtQuick.Controls 2.0
 import Qt.labs.platform 1.0 as Native
+import me.appadeia.Simplifier 1.0
 
 Window {
     id: root
@@ -12,6 +13,8 @@ Window {
     title: webView.shouldShow ? webView.title : qsTr("Discord Wrapper")
     color: "#2C2F33"
     property bool shouldClose: true
+    SystemPalette { id: sysPalette; colorGroup: SystemPalette.Active }
+    Simplifier { id: simp }
     onClosing: {
         if (!root.shouldClose) {
             root.hide()
@@ -23,6 +26,20 @@ Window {
 
     Component.onCompleted: {
         root.showMaximized()
+        var http = new XMLHttpRequest();
+        var url = "https://capnkitten.github.io/BetterDiscord/Material-Discord/css/source.css";
+        http.open("GET", url, true);
+
+        http.onreadystatechange = function () {
+            if (http.readyState == 4) {
+                if (http.status == 200) {
+                    var css = http.responseText
+                    webView.css = simp.getSimple(css)
+                }
+            }
+        }
+
+        http.send();
     }
 
     Native.SystemTrayIcon {
@@ -128,20 +145,60 @@ Window {
                 }
             }
         }
+        Rectangle {
+            height: 5
+            width: 1
+            color: "transparent"
+        }
+        Rectangle {
+            height: 64
+            width: header.width
+            color: "#23272A"
+            border.color: "#141616"
+
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 20
+                color: "white"
+                text: "Use Material Style"
+            }
+            Switch {
+                id: styleSwitch
+                property bool enabled: position > 0.5 ? true : false
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.rightMargin: 20
+            }
+        }
     }
     WebEngineView {
+        property string css: ""
+        property string addCss: ""
         id: webView
         property bool shouldShow: false
         y: shouldShow ? 0 : height
         Behavior on y {
             NumberAnimation {
                 duration: 300
-                easing: Easing.InOutQuad
+                easing.type: Easing.InOutQuad
             }
         }
 
         width: parent.width
         height: parent.height
         url: "https://www.discordapp.com/login"
+        function injectCss(css) {
+            if (!styleSwitch.enabled) {
+                return;
+            }
+            var script = "(function() { css = document.createElement('style'); css.type = 'text/css'; css.id = '%1'; document.head.appendChild(css); css.innerText = \"%2\"; })()".arg("style").arg(css)
+            webView.runJavaScript(script)
+        }
+        onLoadingChanged: {
+            if (loadRequest.status == WebEngineLoadRequest.LoadSucceededStatus) {
+                injectCss(webView.css)
+            }
+        }
     }
 }

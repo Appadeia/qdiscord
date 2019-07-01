@@ -2,6 +2,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
+#include <QQuickStyle>
+#include "simplifier.h"
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -29,11 +31,14 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 
 int main(int argc, char *argv[])
 {
-    qInstallMessageHandler(myMessageOutput);
+    // qInstallMessageHandler(myMessageOutput);
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon::fromTheme("internet-web-browser"));
+
+    QQuickStyle::setStyle("Material");
+    qmlRegisterType<Simplifier>("me.appadeia.Simplifier", 1, 0, "Simplifier");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
