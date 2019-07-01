@@ -6,8 +6,7 @@
     <summary>
         QDiscord is a wrapper for Discord
     </summary>
-    <metadata_license>Unlicense</metadata_license>
-    <icon>internet-web-browser</icon>
+    <metadata_license>CC0-1.0</metadata_license>
     <content_rating type="oars-1.0">
         <content_attribute id="social-chat">moderate</content_attribute>
         <content_attribute id="social-info">moderate</content_attribute>
@@ -21,4 +20,17 @@
             </description>
         </release>
     </releases>
+    <translation type="qt">QDiscord</translation>
+    <screenshots>
+        <screenshot>
+            <caption>QDiscord start screen</caption>
+            <image type="source">https://github.com/Appadeia/qdiscord/blob/master/screenie.png?raw=true</image>
+        </screenshot>
+    </screenshots>
+    <update_contact>
+        uhhadd@gmail.com
+    </update_contact>
+    <url type="homepage">
+        https://github.com/Appadeia/qdiscord
+    </url>
 </component>
