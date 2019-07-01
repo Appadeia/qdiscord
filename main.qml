@@ -249,4 +249,12 @@ Window {
             }
         }
     }
+    Rectangle {
+        anchors.top: webView.top
+        anchors.left: webView.left
+        height: 12
+        width: 72
+        color: "cyan"
+    }
+    // 12px between top and button, 72px sidebar width
 }
