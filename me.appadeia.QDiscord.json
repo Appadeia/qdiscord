@@ -18,6 +18,19 @@
                     "sha256" : "5b6c39507a7806ba6a72edd7fdce114a5d6c7b8e5992e7a6136eb9333a15ecd4"
                 }
             ]
+        },
+        {
+            "name" : "desucordo-files",
+            "buildsystem" : "simple",
+            "build-commands" : [
+                "install -D me.appadeia.QDiscord.appdata.xml /app/share/metainfo/me.appadeia.QDiscord.appdata.xml"
+            ],
+            "sources" : [
+                {
+                    "type" : "file",
+                    "path" : "me.appadeia.QDiscord.appdata.xml"
+                }
+            ]
         }
     ]
 }
