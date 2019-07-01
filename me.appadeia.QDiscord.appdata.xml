@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2019 Carson Black -->
+<component type="desktop-application">
+    <id>me.appadeia.QDiscord</id>
+    <name>QDiscord</name>
+    <summary>
+        QDiscord is a wrapper for Discord.
+    </summary>
+    <metadata_license>Unlicense</metadata_license>
+    <icon>internet-web-browser</icon>
+    <content_rating type="oars-1.0">
+        <content_attribute id="social-chat">moderate</content_attribute>
+        <content_attribute id="social-info">moderate</content_attribute>
+        <content_attribute id="social-audio">moderate</content_attribute>
+        <content_attribute id="social-contacts">intense</content_attribute>
+    </content_rating>
+    <releases>
+        <release version="0.1" date="2019-07-1" urgency="high">
+            <description>
+                <p>First version of QDiscord.</p>
+            </description>
+        </release>
+    </releases>
+</component>
