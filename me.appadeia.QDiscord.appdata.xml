@@ -4,7 +4,7 @@
     <id>me.appadeia.QDiscord</id>
     <name>QDiscord</name>
     <summary>
-        QDiscord is a wrapper for Discord.
+        QDiscord is a wrapper for Discord
     </summary>
     <metadata_license>Unlicense</metadata_license>
     <icon>internet-web-browser</icon>
@@ -17,7 +17,7 @@
     <releases>
         <release version="0.1" date="2019-07-1" urgency="high">
             <description>
-                <p>First version of QDiscord.</p>
+                <p>First version of QDiscord. A Discord wrapper with fast start times and some extra goodies over a simple browser.</p>
             </description>
         </release>
     </releases>
