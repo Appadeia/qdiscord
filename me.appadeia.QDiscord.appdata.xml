@@ -14,9 +14,9 @@
         <content_attribute id="social-contacts">intense</content_attribute>
     </content_rating>
     <releases>
-        <release version="0.1" date="2019-07-1" urgency="high">
+        <release version="0.2" date="2019-07-1" urgency="high">
             <description>
-                <p>First version of QDiscord. A Discord wrapper with fast start times and some extra goodies over a simple browser.</p>
+                <p>This update introduces features such as custom CSS injection and reloading.</p>
             </description>
         </release>
     </releases>
