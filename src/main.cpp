@@ -3,6 +3,8 @@
 #include <QQmlApplicationEngine>
 #include <QIcon>
 #include <QQuickStyle>
+#include <QFileInfo>
+#include <QQmlContext>
 #include "simplifier.h"
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -29,6 +31,16 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     }
 }
 
+bool fileExists(QString path) {
+    QFileInfo check_file(path);
+    // check if file exists and if yes: Is it really a file and no directory?
+    if (check_file.exists() && check_file.isFile()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     qInstallMessageHandler(myMessageOutput);
@@ -44,6 +56,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<Simplifier>("me.appadeia.Simplifier", 1, 0, "Simplifier");
 
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty(QStringLiteral("isFlatpak"), fileExists("/.flatpak-info"));
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

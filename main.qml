@@ -34,6 +34,7 @@ Window {
     }
     Component.onCompleted: {
         console.log(settings.versionIndex)
+        console.log(isFlatpak)
         root.showMaximized()
         var http = new XMLHttpRequest();
         var url = "https://capnkitten.github.io/BetterDiscord/Material-Discord/css/source.css";
@@ -299,6 +300,22 @@ Window {
         anchors.top: cssBox.bottom
         onClicked: {
             cssBox.visible = false
+        }
+    }
+
+    Rectangle {
+        visible: !isFlatpak
+        color: "#62a0ea"
+        width: parent.width
+        height: flatpakLabel.contentHeight * 2
+        anchors.bottom: parent.bottom
+        Label {
+            id: flatpakLabel
+            font.pointSize: 14
+            color: "white"
+            font.bold: true
+            text: "This application is best used as a Flatpak."
+            anchors.centerIn: parent
         }
     }
     WebEngineView {
