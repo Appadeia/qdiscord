@@ -23,12 +23,20 @@
             "name" : "desucordo-files",
             "buildsystem" : "simple",
             "build-commands" : [
-                "install -D me.appadeia.QDiscord.appdata.xml /app/share/metainfo/me.appadeia.QDiscord.appdata.xml"
+                "install -D me.appadeia.QDiscord.appdata.xml /app/share/metainfo/me.appadeia.QDiscord.appdata.xml",
+                "mkdir -p /app/share/fonts",
+                "tar xvf fonts.tar.gz",
+                "install -D *.ttf /app/share/fonts/"
             ],
             "sources" : [
                 {
                     "type" : "file",
                     "path" : "me.appadeia.QDiscord.appdata.xml"
+                },
+                {
+                    "type" : "file",
+                    "url" : "https://github.com/Appadeia/qdiscord/releases/download/0.2/fonts.tar.gz",
+                    "sha256" : "d62c876e0bc76759d7db7a6fb049ad5a10117f542f4c9e7dce33a7d8bed8d6dc"
                 }
             ]
         }
