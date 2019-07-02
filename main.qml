@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Window 2.12
 import QtWebEngine 1.2
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.5
 import Qt.labs.platform 1.0 as Native
 import Qt.labs.settings 1.0
 import me.appadeia.Simplifier 1.0
@@ -206,7 +206,99 @@ Window {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 12
+                onPressed: {
+                    webView.injectCss("theme", webView.css)
+                }
             }
+        }
+        Rectangle {
+            height: 10
+            width: 1
+            color: "transparent"
+        }
+        Rectangle {
+            radius: 5
+            height: childrenRect.height + 2
+            width: childrenRect.width + 2
+            color: "transparent"
+            border.color: "#141616"
+            border.width: 1
+            Column {
+                opacity: 1
+                id: actionColumn
+                x: 1
+                y: 1
+                VersionRow {
+                    height: 64
+                    width: header.width
+                    text: "Reload Discord"
+                    hovering: reloadMaus.containsMouse
+                    MouseArea {
+                        id: reloadMaus
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            webView.reload()
+                            webView.shouldShow = true
+                        }
+                    }
+                }
+                Rectangle {
+                    height: 1
+                    width: header.width
+                    color: "#141616"
+                }
+                VersionRow {
+                    height: 64
+                    width: header.width
+                    text: "Inject Custom CSS"
+                    hovering: cssMaus.containsMouse
+                    MouseArea {
+                        id: cssMaus
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            cssBox.visible = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ScrollView {
+        visible: false
+        id: cssBox
+        height: parent.height / 2
+        width: parent.width / 2
+        anchors.centerIn: parent
+        TextArea {
+            id: cssArea
+            text: "/* Put your CSS here. */"
+        }
+        background: Rectangle {
+            color: "black"
+        }
+    }
+    Button {
+        id: injectBtn
+        visible: cssBox.visible
+        text: "Inject"
+        anchors.right: cssBox.right
+        anchors.top: cssBox.bottom
+        onClicked: {
+            webView.injectCss("custom", simp.getSimple(cssArea.text))
+            cssBox.visible = false
+            webView.shouldShow = true
+        }
+    }
+    Button {
+        visible: cssBox.visible
+        text: "Cancel"
+        anchors.right: injectBtn.left
+        anchors.rightMargin: 5
+        anchors.top: cssBox.bottom
+        onClicked: {
+            cssBox.visible = false
         }
     }
     WebEngineView {
@@ -225,16 +317,18 @@ Window {
         width: parent.width
         height: parent.height
         url: "https://blank.org"
-        function injectCss(css) {
-            if (!styleSwitch.enabled) {
-                return;
-            }
-            var script = "(function() { css = document.createElement('style'); css.type = 'text/css'; css.id = '%1'; document.head.appendChild(css); css.innerText = \"%2\"; })()".arg("style").arg(css)
+        function injectCss(id, css) {
+            console.log(id)
+            console.log(css)
+            var script = "(function() { css = document.createElement('style'); css.type = 'text/css'; css.id = '%1'; document.head.appendChild(css); css.innerText = \"%2\"; })()".arg(id).arg(css)
             webView.runJavaScript(script)
         }
         onLoadingChanged: {
             if (loadRequest.status == WebEngineLoadRequest.LoadSucceededStatus) {
-                injectCss(webView.css)
+                if (styleSwitch.enabled == false) {
+                    return;
+                }
+                injectCss("theme", webView.css)
             }
         }
         Component.onCompleted: {
@@ -252,9 +346,34 @@ Window {
     Rectangle {
         anchors.top: webView.top
         anchors.left: webView.left
-        height: 12
+        height: returnMaus.containsMouse ? 60 : 12
         width: 72
-        color: "cyan"
+        color: Qt.darker("#202225", 3.0)
+        MouseArea {
+            id: returnMaus
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: {
+                webView.shouldShow = false
+            }
+        }
+        Label {
+            opacity: returnMaus.containsMouse ? 1 : 0
+            color: "white"
+            text: "^"
+            anchors.centerIn: parent
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 100
+                }
+            }
+        }
+        Behavior on height {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
     // 12px between top and button, 72px sidebar width
 }
