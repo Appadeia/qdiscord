@@ -80,7 +80,7 @@ Window {
         focus: true
         anchors.horizontalCenter: parent.horizontalCenter
         Rectangle {
-            height: 10
+            height: header.contentHeight * 1.3
             width: 1
             color: "transparent"
         }
@@ -91,7 +91,7 @@ Window {
             text: "Please select a Discord Version"
         }
         Rectangle {
-            height: 10
+            height: header.contentHeight * 1.3
             width: 1
             color: "transparent"
         }
@@ -183,7 +183,7 @@ Window {
             }
         }
         Rectangle {
-            height: 10
+            height: header.contentHeight * 0.6
             width: 1
             color: "transparent"
         }
@@ -213,7 +213,7 @@ Window {
             }
         }
         Rectangle {
-            height: 10
+            height: header.contentHeight * 0.6
             width: 1
             color: "transparent"
         }
